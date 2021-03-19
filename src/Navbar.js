@@ -6,7 +6,7 @@ import { FaBars } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { Button } from "./Button";
 
-function Navbar() {
+function Navbar(currentUser, setCurrentUser) {
   const [clicked, setClicked] = useState(false);
 
   function handleClick() {
@@ -29,7 +29,9 @@ function Navbar() {
           );
         })}
       </ul>
-      <Button>Sign Out</Button>
+      <Link to="/">
+        <Button onClick={() => setCurrentUser(null)}>Sign Out</Button>
+      </Link>
     </nav>
   );
 }
