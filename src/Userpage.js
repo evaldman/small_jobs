@@ -3,18 +3,17 @@ import "./Userpage.css";
 
 function Userpage({ currentUser }) {
   return (
-    // <div>
-    //   <h3>welcome {currentUser.name}</h3>
+    <div>
+      <h3>welcome {currentUser.name}</h3>
 
-    //   <img src={currentUser.image} alt={currentUser.name} />
-    //   <p>{currentUser.bio}</p>
-    //   {/* <ul>{acceptedJobs}</ul> */}
-    // </div>
-    <div className="wrapper">
-      <div>lorem</div>
-      <div>lorem lorem</div>
-      <div>lorem</div>
-      <div>lorem lorem</div>
+      <div className="wrapper">
+        <div>
+          <img src={currentUser.image} alt={currentUser.name} />
+          <p>{currentUser.bio}</p>
+        </div>
+        <div></div>
+        <div>lorem lorem</div>
+      </div>
     </div>
   );
 }
