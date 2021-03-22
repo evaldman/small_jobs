@@ -26,7 +26,9 @@ function Login({ setCurrentUser }) {
         if (data.errors) {
           setErrors(data.errors);
         } else {
-          setCurrentUser(data);
+          // console.log(data.user);
+          setCurrentUser(data.user);
+          localStorage.setItem("token", data.token);
           history.push("/profile");
         }
       });

@@ -1,16 +1,37 @@
-.wrapper > div{
-background: rgb(216, 20, 20);
-padding: 1em;
-border: 1px solid #333;
+.wrapper > div {
+  background: rgb(156, 237, 240);
+  padding: 1em;
+  border: 1px solid #333;
 }
 
-.wrapper > div:nth-child(odd){
-    background: rgb(238, 110, 110);
+/* .wrapper > div:nth-child(odd){
+    background: rgb(156, 237, 240);
+} */
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  margin-left: 20px;
 }
 
-.wrapper{
-    display: grid;
-    grid-template-columns: 70% 30%;
-    grid-column-gap: 1em;
-    grid-row-gap: 1em;
+.delete-button {
+  padding: 8px 20px;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: rgb(67, 168, 235);
+  color: white;
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+.delete-button:hover {
+  padding: 8px 20px;
+  transition: all 0.3s ease-out;
+  background: rgb(233, 16, 16);
+  color: rgb(67, 168, 235);
+  transition: 250ms;
 }
