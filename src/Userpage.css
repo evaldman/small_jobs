@@ -35,3 +35,12 @@
   color: rgb(67, 168, 235);
   transition: 250ms;
 }
+
+.edit-modal {
+  position: absolute;
+  top: 200px;
+  left: 200px;
+  right: 200px;
+  bottom: 200px;
+  background-color: rgb(177, 238, 247);
+}

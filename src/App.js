@@ -7,9 +7,13 @@ import Login from "./Login";
 import Userpage from "./Userpage";
 import Jobs from "./Jobs";
 import Signup from "./Signup";
+import JobDetail from "./JobDetail";
+import NewJob from "./NewJob";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
+  const [jobs, setJobs] = useState([]);
+  const [categories, setCategories] = useState([]);
   // console.log(currentUser);
 
   useEffect(() => {
@@ -25,6 +29,18 @@ function App() {
           setCurrentUser(user);
         });
     }
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/jobs")
+      .then((response) => response.json())
+      .then((jobsData) => setJobs(jobsData));
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/categories")
+      .then((response) => response.json())
+      .then((data) => setCategories(data));
   }, []);
 
   return (
@@ -49,7 +65,33 @@ function App() {
           )}
         </Route>
         <Route exact path="/jobs">
-          {currentUser && <Jobs currentUser={currentUser} />}
+          {currentUser && (
+            <Jobs
+              currentUser={currentUser}
+              jobs={jobs}
+              setJobs={setJobs}
+              categories={categories}
+            />
+          )}
+        </Route>
+        <Route exact path="/jobs/:id">
+          <JobDetail
+            jobs={jobs}
+            setCurrentUser={setCurrentUser}
+            currentUser={currentUser}
+            setJobs={setJobs}
+          />
+        </Route>
+        <Route exact path="/newjob">
+          {currentUser && (
+            <NewJob
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
+              jobs={jobs}
+              setJobs={setJobs}
+              categories={categories}
+            />
+          )}
         </Route>
       </Switch>
     </div>

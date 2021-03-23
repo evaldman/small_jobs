@@ -33,9 +33,16 @@ function Navbar({ currentUser, setCurrentUser }) {
             </li>
             <li>
               <Link className="nav-links" to="/jobs">
-                <span>Find a Job</span>
+                <span>Browse Jobs</span>
               </Link>
             </li>
+            {currentUser.purpose === "employer" && (
+              <li>
+                <Link className="nav-links" to="/newjob">
+                  <span>Post a Job</span>
+                </Link>
+              </li>
+            )}
             <li>
               <Link className="nav-links-mobile" to="/" onClick={handleLogout}>
                 <span>Sign Out</span>

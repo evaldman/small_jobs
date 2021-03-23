@@ -113,7 +113,7 @@ function Signup({ setCurrentUser }) {
           onChange={handleChange}
         >
           <option value hidden>
-            Looking or Posting?
+            Seeking or Posting?
           </option>
           <option>employer</option>
           <option>worker</option>
