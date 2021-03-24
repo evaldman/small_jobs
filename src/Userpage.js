@@ -76,7 +76,7 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
       </>
     );
   });
-
+  // console.log(jobs);
   const acceptToDisplay = currentUser.posted.map((job) => {
     return (
       <>
@@ -112,7 +112,7 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
           <li key={job.id}>
             Title: {job.title}
             <br></br> Date: {moment(job.date).format("MM-DD-YYYY")} <br></br>{" "}
-            Expected cost: ${job.length * job.pay}
+            Amount Paid: ${job.length * job.pay}
             <br></br>Status: {job.accept_status === true ? "Accepted" : "Open"}
             <br></br> Completed? {job.completed === true ? "Yes" : "No"}
           </li>
@@ -191,7 +191,7 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
     setEditJob({ ...editJob, [e.target.name]: e.target.value });
   }
   // console.log(editJob);
-  function handleEditJob(e) {
+  function handleEditJob() {
     // e.preventDefault();
     fetch(`http://localhost:3000/jobs/${editJobId}`, {
       method: "PATCH",
@@ -214,24 +214,30 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
         headers: {
           "Content-Type": "application/json",
         },
-      });
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setCurrentUser(data);
+        });
     }
   }
 
   function handleDeleteUser(id) {
     // console.log(id);
-    const token = localStorage.getItem("token");
-    if (token) {
-      fetch(`http://localhost:3000/users/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setCurrentUser(null);
-      localStorage.removeItem("token");
-      history.push("/");
+    if (window.confirm("Are you sure sure?") === true) {
+      const token = localStorage.getItem("token");
+      if (token) {
+        fetch(`http://localhost:3000/users/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setCurrentUser(null);
+        localStorage.removeItem("token");
+        history.push("/");
+      }
     }
   }
 
