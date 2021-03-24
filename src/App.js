@@ -61,6 +61,8 @@ function App() {
             <Userpage
               currentUser={currentUser}
               setCurrentUser={setCurrentUser}
+              jobs={jobs}
+              setJobs={setJobs}
             />
           )}
         </Route>

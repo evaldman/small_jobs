@@ -4,7 +4,7 @@ import moment from "moment";
 import { useHistory } from "react-router-dom";
 import Modal from "react-modal";
 
-function Userpage({ currentUser, setCurrentUser }) {
+function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
   const [showModal, setShowModal] = useState(false);
   const [jobModal, setJobModal] = useState(false);
   const history = useHistory();
@@ -15,17 +15,22 @@ function Userpage({ currentUser, setCurrentUser }) {
     purpose: currentUser.purpose,
   });
   const [editJob, setEditJob] = useState("");
+  const [editJobId, setEditJobId] = useState("");
 
   const acceptedToDisplay = currentUser.accepted.map((job) => {
     return (
-      <li key={job.id}>
-        Title: {job.title} <br></br> Date:{" "}
-        {moment(job.date).format("MM-DD-YYYY")} <br></br> Expected Pay: $
-        {job.length * job.pay}
-        <br></br>
-        <button onClick={() => handleCompleted(job.id)}>Completed</button>
-        <button onClick={() => handleCancel(job.id)}>Cancel</button>
-      </li>
+      <>
+        {job.completed === false ? (
+          <li key={job.id}>
+            Title: {job.title} <br></br> Date:{" "}
+            {moment(job.date).format("MM-DD-YYYY")} <br></br> Expected Pay: $
+            {job.length * job.pay}
+            <br></br>
+            {/* <button onClick={() => handleCompleted(job)}>Completed</button> */}
+            <button onClick={() => handleCancel(job)}>Cancel</button>
+          </li>
+        ) : null}
+      </>
     );
   });
 
@@ -44,27 +49,129 @@ function Userpage({ currentUser, setCurrentUser }) {
     );
   });
 
-  const postToDisplay = currentUser.posted.map((job) => {
+  const openToDisplay = currentUser.posted.map((job) => {
     return (
-      <li key={job.id}>
-        Title: {job.title}
-        <br></br> Date: {moment(job.date).format("MM-DD-YYYY")} <br></br>{" "}
-        Expected cost: ${job.length * job.pay}
-        <br></br>Status: {job.accept_status === true ? "Accepted" : "Open"}
-        <br></br> Completed? {job.completed === true ? "Yes" : "No"}
-        <br></br>
-        <button onClick={() => handleCompleted(job.id)}>Completed</button>
-        <button onClick={() => openEditJob(job)}>Edit</button>
-        <button onClick={() => handleDeleteJob(job.id)}>Delete</button>
-      </li>
+      <>
+        {job.completed === false && job.accept_status === false ? (
+          <li key={job.id}>
+            Title: {job.title}
+            <br></br> Date: {moment(job.date).format("MM-DD-YYYY")} <br></br>{" "}
+            Expected cost: ${job.length * job.pay}
+            <br></br>Status: {job.accept_status === true ? "Accepted" : "Open"}
+            <br></br> Completed? {job.completed === true ? "Yes" : "No"}
+            <br></br>
+            {job.completed === false && (
+              <>
+                {job.accept_status === true && (
+                  <button onClick={() => handleCompleted(job)}>
+                    Completed
+                  </button>
+                )}
+                <button onClick={() => openEditJob(job)}>Edit</button>
+                <button onClick={() => handleDeleteJob(job)}>Delete</button>
+              </>
+            )}
+          </li>
+        ) : null}
+      </>
     );
   });
 
-  function handleCancel(id) {
-    console.log(id);
+  const acceptToDisplay = currentUser.posted.map((job) => {
+    return (
+      <>
+        {job.completed === false && job.accept_status === true ? (
+          <li key={job.id}>
+            Title: {job.title}
+            <br></br> Date: {moment(job.date).format("MM-DD-YYYY")} <br></br>{" "}
+            Expected cost: ${job.length * job.pay}
+            <br></br>Status: {job.accept_status === true ? "Accepted" : "Open"}
+            <br></br> Completed? {job.completed === true ? "Yes" : "No"}
+            <br></br>
+            {job.completed === false && (
+              <>
+                {job.accept_status === true && (
+                  <button onClick={() => handleCompleted(job)}>
+                    Completed
+                  </button>
+                )}
+                <button onClick={() => openEditJob(job)}>Edit</button>
+                <button onClick={() => handleDeleteJob(job)}>Delete</button>
+              </>
+            )}
+          </li>
+        ) : null}
+      </>
+    );
+  });
+
+  const completeToDisplay = currentUser.posted.map((job) => {
+    return (
+      <>
+        {job.completed === true ? (
+          <li key={job.id}>
+            Title: {job.title}
+            <br></br> Date: {moment(job.date).format("MM-DD-YYYY")} <br></br>{" "}
+            Expected cost: ${job.length * job.pay}
+            <br></br>Status: {job.accept_status === true ? "Accepted" : "Open"}
+            <br></br> Completed? {job.completed === true ? "Yes" : "No"}
+          </li>
+        ) : null}
+      </>
+    );
+  });
+
+  function handleCancel(job) {
+    // console.log(job);
+    const jobToCancel = currentUser.accepted_jobs.filter(
+      (accept) => accept.job_id === job.id
+    );
+    const cancelId = jobToCancel[0].id;
+    // console.log(cancelId);
+    fetch(`http://localhost:3000/accepted_jobs/${cancelId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        job_id: job.id,
+        user_id: currentUser.id,
+        accept_status: false,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data);
+        setJobs(
+          jobs.map((job) => {
+            if (job.id === data.job.id) {
+              return data.job;
+            } else {
+              return job;
+            }
+          })
+        );
+        setCurrentUser(data.currentUser);
+      });
   }
-  function handleCompleted(id) {
-    console.log(id);
+
+  function handleCompleted(job) {
+    if (window.confirm("Mark complete?? This can't be undone!") === true) {
+      fetch(`http://localhost:3000/jobs/${job.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          completed: true,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // console.log(data);
+          setCurrentUser(data.user);
+        });
+    }
   }
 
   function openEditJob(job) {
@@ -74,19 +181,41 @@ function Userpage({ currentUser, setCurrentUser }) {
       description: job.description,
       length: job.length,
       pay: job.pay,
-      date: job.date,
+      date: moment(job.date).format("YYYY-MM-DD"),
     });
+    setEditJobId(job.id);
   }
-  console.log(editJob);
 
+  // console.log(editJobId);
   function handleJobChange(e) {
     setEditJob({ ...editJob, [e.target.name]: e.target.value });
   }
+  // console.log(editJob);
+  function handleEditJob(e) {
+    // e.preventDefault();
+    fetch(`http://localhost:3000/jobs/${editJobId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editJob),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setCurrentUser(data.user);
+      });
+  }
 
-  function handleEditJob() {}
-
-  function handleDeleteJob(id) {
-    console.log(id);
+  function handleDeleteJob(job) {
+    // console.log(job);
+    if (window.confirm("Remove this job forever?") === true) {
+      fetch(`http://localhost:3000/jobs/${job.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
   }
 
   function handleDeleteUser(id) {
@@ -161,8 +290,12 @@ function Userpage({ currentUser, setCurrentUser }) {
             </>
           ) : (
             <>
-              <h3>Posted Jobs</h3>
-              <ul>{postToDisplay}</ul>
+              <h3>Open Jobs</h3>
+              <ul>{openToDisplay}</ul>
+              <h3>Accepted Jobs</h3>
+              <ul>{acceptToDisplay}</ul>
+              <h3>Completed Jobs</h3>
+              <ul>{completeToDisplay}</ul>
             </>
           )}
         </div>
@@ -187,6 +320,7 @@ function Userpage({ currentUser, setCurrentUser }) {
         ariaHideApp={false}
         onRequestClose={() => setShowModal(false)}
       >
+        <h2>Edit Profile</h2>
         <form onSubmit={handleEditProfile} autoComplete="off">
           <label>Name</label>
           <input
@@ -228,6 +362,7 @@ function Userpage({ currentUser, setCurrentUser }) {
         ariaHideApp={false}
         onRequestClose={() => setJobModal(false)}
       >
+        <h2>Edit Job</h2>
         <form onSubmit={handleEditJob} autoComplete="off">
           <label>Title:</label>
           <input
@@ -277,10 +412,11 @@ function Userpage({ currentUser, setCurrentUser }) {
             type="date"
             value={editJob.date}
             name="date"
+            // defaultValue={editJob.date}
             onChange={handleJobChange}
           ></input>
           <br></br>
-          <input type="submit" value="Udate Job" />
+          <input type="submit" value="Update Job" />
         </form>
         <div>
           <button onClick={() => setJobModal(false)}>Cancel</button>
