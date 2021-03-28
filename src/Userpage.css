@@ -1,19 +1,23 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  margin-left: 20px;
+  margin-right: 20px;
+  grid-auto-rows: minmax(400px, auto);
+}
+
 .wrapper > div {
   background: rgb(156, 237, 240);
   padding: 1em;
   border: 1px solid #333;
 }
 
-/* .wrapper > div:nth-child(odd){
-    background: rgb(156, 237, 240);
-} */
-
-.wrapper {
+.nested {
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-column-gap: 1em;
-  grid-row-gap: 1em;
-  margin-left: 20px;
 }
 
 .delete-button {
@@ -43,4 +47,11 @@
   right: 200px;
   bottom: 200px;
   background-color: rgb(177, 238, 247);
+  z-index: 1;
+}
+
+.fc .fc-view-harness {
+  flex-grow: 1;
+  position: relative;
+  z-index: 0;
 }

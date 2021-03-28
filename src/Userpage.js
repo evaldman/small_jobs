@@ -3,10 +3,22 @@ import "./Userpage.css";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 import Modal from "react-modal";
+import FullCalendar from "@fullcalendar/react";
+import daygridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+// import JobDetail from "./JobDetail";
 
-function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
+function Userpage({
+  currentUser,
+  setCurrentUser,
+  jobs,
+  setJobs,
+  calendarData,
+  setCalendarData,
+}) {
   const [showModal, setShowModal] = useState(false);
   const [jobModal, setJobModal] = useState(false);
+  const [jobDetailModal, setJobDetailModal] = useState(false);
   const history = useHistory();
   const [formData, setFormData] = useState({
     name: currentUser.name,
@@ -16,6 +28,7 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
   });
   const [editJob, setEditJob] = useState("");
   const [editJobId, setEditJobId] = useState("");
+  const [calendarClickId, setCalendarClickId] = useState("");
 
   const acceptedToDisplay = currentUser.accepted.map((job) => {
     return (
@@ -152,6 +165,13 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
           })
         );
         setCurrentUser(data.currentUser);
+        const newData = data.currentUser.accepted.map((job) => {
+          return {
+            title: job.title,
+            date: moment(job.date).format("YYYY-MM-DD"),
+          };
+        });
+        setCalendarData(newData);
       });
   }
 
@@ -274,7 +294,33 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
         });
     }
   }
-  // console.log(currentUser);
+
+  // console.log(currentUser.accepted.map((job) => job.id));
+  // console.log(calendarData);
+  function handleDateClick(id) {
+    setJobDetailModal(true);
+    // console.log(id);
+    setCalendarClickId(id);
+  }
+
+  // console.log(typeof calendarClickId);
+  const clickedJob = currentUser.accepted.map((job) => {
+    return (
+      <>
+        {job.id === parseInt(calendarClickId) ? (
+          <div>
+            <h1>{job.title}</h1>
+            <h3>{job.description}</h3>
+            <h3>Hours: {job.length}</h3>
+            <h3>Pay: ${job.pay}/hr</h3>
+            <h3>Start Time:</h3>
+            <h3>When: {moment(job.date).format("dddd, MMMM Do YYYY")}</h3>
+          </div>
+        ) : null}
+      </>
+    );
+  });
+
   return (
     <div>
       <h3>
@@ -285,23 +331,40 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
         <div>
           <img src={currentUser.image} alt={currentUser.username} />
           <p>{currentUser.bio}</p>
+          <div>
+            <FullCalendar
+              plugins={[daygridPlugin, interactionPlugin]}
+              eventClick={(e) => handleDateClick(e.event.id)}
+              events={calendarData}
+            />
+          </div>
         </div>
-        <div>
+        <div className="nested">
           {currentUser.purpose === "worker" ? (
             <>
-              <h3>Accepted Jobs</h3>
-              <ul>{acceptedToDisplay}</ul>
-              <h3>Completed Jobs</h3>
-              <ul>{completedToDislay}</ul>
+              <div>
+                <h3>Accepted Jobs</h3>
+                <ul>{acceptedToDisplay}</ul>
+              </div>
+              <div>
+                <h3>Completed Jobs</h3>
+                <ul>{completedToDislay}</ul>
+              </div>
             </>
           ) : (
             <>
-              <h3>Open Jobs</h3>
-              <ul>{openToDisplay}</ul>
-              <h3>Accepted Jobs</h3>
-              <ul>{acceptToDisplay}</ul>
-              <h3>Completed Jobs</h3>
-              <ul>{completeToDisplay}</ul>
+              <div>
+                <h3>Open Jobs</h3>
+                <ul>{openToDisplay}</ul>
+              </div>
+              <div>
+                <h3>Accepted Jobs</h3>
+                <ul>{acceptToDisplay}</ul>
+              </div>
+              <div>
+                <h3>Completed Jobs</h3>
+                <ul>{completeToDisplay}</ul>
+              </div>
             </>
           )}
         </div>
@@ -316,9 +379,6 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
       <button className="delete-button" onClick={() => setShowModal(true)}>
         Edit Profile
       </button>
-      {/* {currentUser.purpose === "employer" && (
-        <button className="delete-button">Post New Job</button>
-      )} */}
 
       <Modal
         className="edit-modal"
@@ -427,6 +487,14 @@ function Userpage({ currentUser, setCurrentUser, jobs, setJobs }) {
         <div>
           <button onClick={() => setJobModal(false)}>Cancel</button>
         </div>
+      </Modal>
+      <Modal
+        className="edit-modal"
+        isOpen={jobDetailModal}
+        ariaHideApp={false}
+        onRequestClose={() => setJobDetailModal(false)}
+      >
+        {clickedJob}
       </Modal>
     </div>
   );

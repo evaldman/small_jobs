@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import JobDetailCard from "./JobDetailCard";
 
-function JobDetail({ currentUser, setJobs, jobs, setCurrentUser }) {
+function JobDetail({
+  currentUser,
+  setJobs,
+  jobs,
+  setCurrentUser,
+  calendarData,
+  setCalendarData,
+}) {
   const [job, setJob] = useState(null);
   const params = useParams();
   const id = params.id;
@@ -25,6 +32,8 @@ function JobDetail({ currentUser, setJobs, jobs, setCurrentUser }) {
           setJobs={setJobs}
           currentUser={currentUser}
           setCurrentUser={setCurrentUser}
+          calendarData={calendarData}
+          setCalendarData={setCalendarData}
         />
       ) : (
         <h1>Loading...</h1>

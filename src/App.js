@@ -9,12 +9,13 @@ import Jobs from "./Jobs";
 import Signup from "./Signup";
 import JobDetail from "./JobDetail";
 import NewJob from "./NewJob";
+import moment from "moment";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [jobs, setJobs] = useState([]);
   const [categories, setCategories] = useState([]);
-  // console.log(currentUser);
+  const [calendarData, setCalendarData] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -27,9 +28,20 @@ function App() {
         .then((response) => response.json())
         .then((user) => {
           setCurrentUser(user);
+          const someData = user.accepted.map((job) => {
+            return {
+              id: job.id,
+              title: job.title,
+              date: moment(job.date).format("YYYY-MM-DD"),
+            };
+          });
+          setCalendarData(someData);
         });
     }
   }, []);
+  // console.log(calendarData);
+  // console.log(currentUser.accepted.map((job) => job.title));
+  // console.log(currentUser);
 
   useEffect(() => {
     fetch("http://localhost:3000/jobs")
@@ -63,6 +75,8 @@ function App() {
               setCurrentUser={setCurrentUser}
               jobs={jobs}
               setJobs={setJobs}
+              calendarData={calendarData}
+              setCalendarData={setCalendarData}
             />
           )}
         </Route>
@@ -82,6 +96,8 @@ function App() {
             setCurrentUser={setCurrentUser}
             currentUser={currentUser}
             setJobs={setJobs}
+            calendarData={calendarData}
+            setCalendarData={setCalendarData}
           />
         </Route>
         <Route exact path="/newjob">

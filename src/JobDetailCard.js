@@ -3,7 +3,15 @@ import React, { useState } from "react";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 
-function JobDetailCard({ job, setJobs, jobs, currentUser, setCurrentUser }) {
+function JobDetailCard({
+  job,
+  setJobs,
+  jobs,
+  currentUser,
+  setCurrentUser,
+  calendarData,
+  setCalendarData,
+}) {
   const [info, setInfo] = useState(false);
 
   const history = useHistory();
@@ -38,6 +46,13 @@ function JobDetailCard({ job, setJobs, jobs, currentUser, setCurrentUser }) {
           })
         );
         setCurrentUser(data.currentUser);
+        const newData = data.currentUser.accepted.map((job) => {
+          return {
+            title: job.title,
+            date: moment(job.date).format("YYYY-MM-DD"),
+          };
+        });
+        setCalendarData(newData);
         history.push("/profile");
       });
   }
