@@ -2,6 +2,7 @@ import React, { useState } from "react";
 // import { Link } from "react-router-dom";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+// import "./JobDetailCard.css";
 
 function JobDetailCard({
   job,
@@ -70,7 +71,11 @@ function JobDetailCard({
       <br></br>
       {info ? (
         <>
-          <img src={job.user.image} alt={job.user.name} />
+          <img
+            className="profile-pic"
+            src={job.user.image}
+            alt={job.user.name}
+          />
           <br></br>
           <p>{job.user.bio}</p>
           <br></br>
@@ -78,7 +83,7 @@ function JobDetailCard({
         </>
       ) : null}
       <br></br>
-      {currentUser.purpose === "worker" ? (
+      {currentUser && currentUser.purpose === "worker" ? (
         <button onClick={handleAccept}>Accept Job</button>
       ) : null}
     </div>

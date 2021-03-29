@@ -302,7 +302,7 @@ function Userpage({
     // console.log(id);
     setCalendarClickId(id);
   }
-
+  // console.log(calendarClickId);
   // console.log(typeof calendarClickId);
   const clickedJob = currentUser.accepted.map((job) => {
     return (
@@ -329,9 +329,23 @@ function Userpage({
 
       <div className="wrapper">
         <div>
-          <img src={currentUser.image} alt={currentUser.username} />
-          <p>{currentUser.bio}</p>
-          <div>
+          <div className="nested">
+            <div>
+              <img
+                className="profile-pic"
+                src={currentUser.image}
+                alt={currentUser.username}
+              />
+            </div>
+            <div>
+              <h3>Bio</h3>
+              <p>{currentUser.bio}</p>
+            </div>
+            {/* <div>
+              <h3>Total Earned</h3>
+            </div> */}
+          </div>
+          <div className="profile-calendar">
             <FullCalendar
               plugins={[daygridPlugin, interactionPlugin]}
               eventClick={(e) => handleDateClick(e.event.id)}
