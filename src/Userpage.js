@@ -167,6 +167,7 @@ function Userpage({
         setCurrentUser(data.currentUser);
         const newData = data.currentUser.accepted.map((job) => {
           return {
+            id: job.id,
             title: job.title,
             date: moment(job.date).format("YYYY-MM-DD"),
           };
@@ -320,7 +321,17 @@ function Userpage({
       </>
     );
   });
-
+  console.log(currentUser.accepted);
+  function totalCompleted() {
+    return currentUser.accepted
+      .filter((job) => job.completed)
+      .reduce(
+        (total, completedJob) =>
+          (total += completedJob.length * completedJob.pay),
+        0
+      );
+  }
+  // console.log(totalCompleted());
   return (
     <div>
       <h3>
@@ -341,9 +352,10 @@ function Userpage({
               <h3>Bio</h3>
               <p>{currentUser.bio}</p>
             </div>
-            {/* <div>
+            <div>
               <h3>Total Earned</h3>
-            </div> */}
+              <p>${totalCompleted()}</p>
+            </div>
           </div>
           <div className="profile-calendar">
             <FullCalendar

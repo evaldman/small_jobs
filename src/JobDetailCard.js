@@ -49,6 +49,7 @@ function JobDetailCard({
         setCurrentUser(data.currentUser);
         const newData = data.currentUser.accepted.map((job) => {
           return {
+            id: job.id,
             title: job.title,
             date: moment(job.date).format("YYYY-MM-DD"),
           };
