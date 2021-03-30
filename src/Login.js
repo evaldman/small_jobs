@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./Login.css";
+import moment from "moment";
 
-function Login({ setCurrentUser }) {
+function Login({ setCurrentUser, setCalendarData }) {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const history = useHistory();
   const [errors, setErrors] = useState([]);
@@ -29,6 +30,14 @@ function Login({ setCurrentUser }) {
           // console.log(data.user);
           setCurrentUser(data.user);
           localStorage.setItem("token", data.token);
+          const someData = data.user.accepted.map((job) => {
+            return {
+              id: job.id,
+              title: job.title,
+              date: moment.utc(job.date).format("YYYY-MM-DD"),
+            };
+          });
+          setCalendarData(someData);
           history.push("/profile");
         }
       });

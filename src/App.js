@@ -32,7 +32,7 @@ function App() {
             return {
               id: job.id,
               title: job.title,
-              date: moment(job.date).format("YYYY-MM-DD"),
+              date: moment.utc(job.date).format("YYYY-MM-DD"),
             };
           });
           setCalendarData(someData);
@@ -42,6 +42,7 @@ function App() {
   // console.log(calendarData);
   // console.log(currentUser.accepted.map((job) => job.title));
   // console.log(currentUser);
+  console.log(jobs);
 
   useEffect(() => {
     fetch("http://localhost:3000/jobs")
@@ -63,7 +64,10 @@ function App() {
           <Frontpage />
         </Route>
         <Route exact path="/login">
-          <Login setCurrentUser={setCurrentUser} />
+          <Login
+            setCurrentUser={setCurrentUser}
+            setCalendarData={setCalendarData}
+          />
         </Route>
         <Route exact path="/signup">
           <Signup setCurrentUser={setCurrentUser} />

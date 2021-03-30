@@ -36,8 +36,8 @@ function Userpage({
         {job.completed === false ? (
           <li key={job.id}>
             Title: {job.title} <br></br> Date:{" "}
-            {moment(job.date).format("MM-DD-YYYY")} <br></br> Expected Pay: $
-            {job.length * job.pay}
+            {moment.utc(job.date).format("MM-DD-YYYY")} <br></br> Expected Pay:
+            ${job.length * job.pay}
             <br></br>
             {/* <button onClick={() => handleCompleted(job)}>Completed</button> */}
             <button onClick={() => handleCancel(job)}>Cancel</button>
@@ -53,8 +53,8 @@ function Userpage({
         {job.completed === true ? (
           <li key={job.id}>
             Title: {job.title} <br></br> Date:{" "}
-            {moment(job.date).format("MM-DD-YYYY")} <br></br> Pay Received: $
-            {job.length * job.pay}
+            {moment.utc(job.date).format("MM-DD-YYYY")} <br></br> Pay Received:
+            ${job.length * job.pay}
             <br></br>
           </li>
         ) : null}
@@ -68,8 +68,8 @@ function Userpage({
         {job.completed === false && job.accept_status === false ? (
           <li key={job.id}>
             Title: {job.title}
-            <br></br> Date: {moment(job.date).format("MM-DD-YYYY")} <br></br>{" "}
-            Expected cost: ${job.length * job.pay}
+            <br></br> Date: {moment.utc(job.date).format("MM-DD-YYYY")}{" "}
+            <br></br> Expected cost: ${job.length * job.pay}
             <br></br>Status: {job.accept_status === true ? "Accepted" : "Open"}
             <br></br> Completed? {job.completed === true ? "Yes" : "No"}
             <br></br>
@@ -96,8 +96,8 @@ function Userpage({
         {job.completed === false && job.accept_status === true ? (
           <li key={job.id}>
             Title: {job.title}
-            <br></br> Date: {moment(job.date).format("MM-DD-YYYY")} <br></br>{" "}
-            Expected cost: ${job.length * job.pay}
+            <br></br> Date: {moment.utc(job.date).format("MM-DD-YYYY")}{" "}
+            <br></br> Expected cost: ${job.length * job.pay}
             <br></br>Status: {job.accept_status === true ? "Accepted" : "Open"}
             <br></br> Completed? {job.completed === true ? "Yes" : "No"}
             <br></br>
@@ -124,8 +124,8 @@ function Userpage({
         {job.completed === true ? (
           <li key={job.id}>
             Title: {job.title}
-            <br></br> Date: {moment(job.date).format("MM-DD-YYYY")} <br></br>{" "}
-            Amount Paid: ${job.length * job.pay}
+            <br></br> Date: {moment.utc(job.date).format("MM-DD-YYYY")}{" "}
+            <br></br> Amount Paid: ${job.length * job.pay}
             <br></br>Status: {job.accept_status === true ? "Accepted" : "Open"}
             <br></br> Completed? {job.completed === true ? "Yes" : "No"}
           </li>
@@ -169,7 +169,7 @@ function Userpage({
           return {
             id: job.id,
             title: job.title,
-            date: moment(job.date).format("YYYY-MM-DD"),
+            date: moment.utc(job.date).format("YYYY-MM-DD"),
           };
         });
         setCalendarData(newData);
@@ -202,7 +202,7 @@ function Userpage({
       description: job.description,
       length: job.length,
       pay: job.pay,
-      date: moment(job.date).format("YYYY-MM-DD"),
+      date: moment.utc(job.date).format("YYYY-MM-DD"),
     });
     setEditJobId(job.id);
   }
@@ -309,20 +309,20 @@ function Userpage({
     return (
       <>
         {job.id === parseInt(calendarClickId) ? (
-          <div>
+          <div className="cal-modal-container">
             <h1>{job.title}</h1>
             <h3>{job.description}</h3>
             <h3>Hours: {job.length}</h3>
             <h3>Pay: ${job.pay}/hr</h3>
             <h3>Start Time:</h3>
-            <h3>When: {moment(job.date).format("dddd, MMMM Do YYYY")}</h3>
+            <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
           </div>
         ) : null}
       </>
     );
   });
-  console.log(currentUser.accepted);
-  function totalCompleted() {
+  // console.log(currentUser.accepted);
+  function totalWorkerCompleted() {
     return currentUser.accepted
       .filter((job) => job.completed)
       .reduce(
@@ -332,9 +332,18 @@ function Userpage({
       );
   }
   // console.log(totalCompleted());
+  function totalEmployerCompleted() {
+    return currentUser.posted
+      .filter((job) => job.completed)
+      .reduce(
+        (total, completedJob) =>
+          (total += completedJob.length * completedJob.pay),
+        0
+      );
+  }
   return (
     <div>
-      <h3>
+      <h3 className="profile-username">
         Welcome {currentUser.name} ({currentUser.purpose})
       </h3>
 
@@ -353,8 +362,17 @@ function Userpage({
               <p>{currentUser.bio}</p>
             </div>
             <div>
-              <h3>Total Earned</h3>
-              <p>${totalCompleted()}</p>
+              {currentUser.purpose === "worker" ? (
+                <>
+                  <h3>Total Earned</h3>
+                  <p>${totalWorkerCompleted()}</p>
+                </>
+              ) : (
+                <>
+                  <h3>Total Paid</h3>
+                  <p>${totalEmployerCompleted()}</p>
+                </>
+              )}
             </div>
           </div>
           <div className="profile-calendar">
@@ -412,40 +430,52 @@ function Userpage({
         ariaHideApp={false}
         onRequestClose={() => setShowModal(false)}
       >
-        <h2>Edit Profile</h2>
-        <form onSubmit={handleEditProfile} autoComplete="off">
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
+        <div className="edit-container">
+          <form id="edit-form" onSubmit={handleEditProfile} autoComplete="off">
+            <h3>Edit Profile</h3>
+            <label>Name</label>
+            <input
+              className="form-input"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+            <br></br>
+            <label>Bio</label>
+            <textarea
+              className="form-textarea"
+              name="bio"
+              value={formData.bio}
+              onChange={handleChange}
+            />
+            <br></br>
+            <label>Profile Pic</label>
+            <input
+              className="form-input"
+              type="text"
+              name="image"
+              value={formData.image}
+              onChange={handleChange}
+            />
 
-          <label>Bio</label>
-          <textarea name="bio" value={formData.bio} onChange={handleChange} />
-
-          <label>Profile Pic</label>
-          <input
-            type="text"
-            name="image"
-            value={formData.image}
-            onChange={handleChange}
-          />
-
-          <label>Purpose</label>
-          <select
-            name="purpose"
-            value={formData.purpose}
-            onChange={handleChange}
-          >
-            <option>employer</option>
-            <option>worker</option>
-          </select>
-          <input type="submit" value="Update" />
-        </form>
-        <div>
-          <button onClick={() => setShowModal(false)}>Cancel</button>
+            <label>Purpose</label>
+            <select
+              className="form-input"
+              name="purpose"
+              value={formData.purpose}
+              onChange={handleChange}
+            >
+              <option>employer</option>
+              <option>worker</option>
+            </select>
+            <input className="form-submit" type="submit" value="Update" />
+          </form>
+          <div className="">
+            <button onClick={() => setShowModal(false)}>
+              <b>X</b>
+            </button>
+          </div>
         </div>
       </Modal>
       <Modal
@@ -454,10 +484,12 @@ function Userpage({
         ariaHideApp={false}
         onRequestClose={() => setJobModal(false)}
       >
-        <h2>Edit Job</h2>
-        <form onSubmit={handleEditJob} autoComplete="off">
+        <div className="edit-container"></div>
+        <form id="edit-form" onSubmit={handleEditJob} autoComplete="off">
+          <h3>Edit Job</h3>
           <label>Title:</label>
           <input
+            className="form-input"
             type="text"
             value={editJob.title}
             name="title"
@@ -466,6 +498,7 @@ function Userpage({
           <br></br>
           <label>Description:</label>
           <textarea
+            className="form-textarea"
             value={editJob.description}
             name="description"
             onChange={handleJobChange}
@@ -485,6 +518,7 @@ function Userpage({
         <br></br> */}
           <label>Length:</label>
           <input
+            className="form-input"
             type="text"
             value={editJob.length}
             name="length"
@@ -493,6 +527,7 @@ function Userpage({
           <br></br>
           <label>Pay:</label>
           <input
+            className="form-input"
             type="text"
             value={editJob.pay}
             name="pay"
@@ -501,6 +536,7 @@ function Userpage({
           <br></br>
           <label>Date:</label>
           <input
+            className="form-input"
             type="date"
             value={editJob.date}
             name="date"
@@ -508,10 +544,12 @@ function Userpage({
             onChange={handleJobChange}
           ></input>
           <br></br>
-          <input type="submit" value="Update Job" />
+          <input className="form-submit" type="submit" value="Update Job" />
         </form>
         <div>
-          <button onClick={() => setJobModal(false)}>Cancel</button>
+          <button onClick={() => setJobModal(false)}>
+            <b>X</b>
+          </button>
         </div>
       </Modal>
       <Modal

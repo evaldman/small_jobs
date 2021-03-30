@@ -1,9 +1,10 @@
 import React from "react";
 import logo from "./images/SmallJobsLogo.png";
+import "./frontpage.css";
 
 function Frontpage() {
   return (
-    <div>
+    <div className="frontpage">
       <img src={logo} alt="logo" />
       <br></br>
       Welcome to Small Jobs <br /> A place to find all types of work!

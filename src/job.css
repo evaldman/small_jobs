@@ -1,0 +1,41 @@
+.jobs-list {
+  list-style-type: none;
+  margin: 0;
+  margin-top: 10px;
+  padding: 0;
+  border: 2px solid rgb(73, 63, 252);
+  font-family: Arial, Sans-Serif;
+  max-width: 600px;
+  margin-left: 30px;
+  /* text-decoration: none; */
+}
+
+.jobs-lines {
+  border-bottom: 2px solid #bdc3c7;
+  padding: 15px;
+  font-size: 18px;
+  color: black;
+  /* text-decoration: none; */
+}
+
+.jobs-lines:last-child {
+  border-bottom: none;
+}
+
+.job-lines-link {
+  text-decoration: none;
+  color: black;
+}
+
+.job-lines-link:hover {
+  color: rgb(73, 63, 252);
+  background-color: rgb(162, 237, 247);
+}
+
+.job-user {
+  margin-left: 30px;
+}
+
+.job-select {
+  margin-left: 30px;
+}

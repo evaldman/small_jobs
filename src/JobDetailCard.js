@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 // import { Link } from "react-router-dom";
 import moment from "moment";
+import "moment-timezone";
 import { useHistory } from "react-router-dom";
-// import "./JobDetailCard.css";
+import "./JobDetailCard.css";
 
 function JobDetailCard({
   job,
@@ -51,7 +52,7 @@ function JobDetailCard({
           return {
             id: job.id,
             title: job.title,
-            date: moment(job.date).format("YYYY-MM-DD"),
+            date: moment.utc(job.date).format("YYYY-MM-DD"),
           };
         });
         setCalendarData(newData);
@@ -60,34 +61,86 @@ function JobDetailCard({
   }
 
   return (
-    <div>
-      <h1>{job.title}</h1>
-      <h3>{job.description}</h3>
-      <h3>Hours: {job.length}</h3>
-      <h3>Pay: ${job.pay}/hr</h3>
-      <h3>Start Time:</h3>
-      <h3>When: {moment(job.date).format("dddd, MMMM Do YYYY")}</h3>
-      <h3>Posted by: {job.user.name}</h3>
-      <button onClick={infoClick}>{job.user.name} Info</button>
-      <br></br>
-      {info ? (
-        <>
-          <img
-            className="profile-pic"
-            src={job.user.image}
-            alt={job.user.name}
-          />
-          <br></br>
-          <p>{job.user.bio}</p>
-          <br></br>
-          <p>Number of Job Posts: {job.user.posted.length}</p>
-        </>
-      ) : null}
-      <br></br>
-      {currentUser && currentUser.purpose === "worker" ? (
-        <button onClick={handleAccept}>Accept Job</button>
-      ) : null}
+    <div className="detail-container">
+      <div class="container">
+        <header className="job-title">
+          {" "}
+          <h1>{job.title}</h1>
+        </header>
+        <div class="content">
+          <div class="sidebar">
+            <div className="aside">
+              <h3>Hours: {job.length}</h3>
+              <h3>Pay: ${job.pay}/hr</h3>
+              <h3>Start Time: {moment.utc(job.time).format("hh:mm A")}</h3>
+            </div>
+            <div className="aside2">
+              <h3>Posted by: {job.user.name}</h3>
+              <button onClick={infoClick}>
+                {!info ? "Show Information" : "Hide"}
+              </button>
+              <br></br>
+
+              {currentUser && currentUser.purpose === "worker" ? (
+                <button onClick={handleAccept}>Accept Job</button>
+              ) : null}
+              {info ? (
+                <>
+                  <br></br>
+                  <p>Number of Job Posts: {job.user.posted.length}</p>
+                </>
+              ) : null}
+            </div>
+          </div>
+          <div class="main">
+            <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
+            <h3>{job.description}</h3>
+            <br></br>
+            {info ? (
+              <>
+                <img
+                  className="profile-pic"
+                  src={job.user.image}
+                  alt={job.user.name}
+                />
+
+                <p>{job.user.bio}</p>
+              </>
+            ) : null}
+          </div>
+        </div>
+      </div>
     </div>
+    // <div>
+    //   <h1>{job.title}</h1>
+    //   <h3>{job.description}</h3>
+    //   <h3>Hours: {job.length}</h3>
+    //   <h3>Pay: ${job.pay}/hr</h3>
+    //   <h3>Start Time: {moment.utc(job.time).format("hh:mm A")}</h3>
+    //   <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
+    //   <h3>
+    //     Posted by: {job.user.name} <></> <></>
+    //     <button onClick={infoClick}>{!info ? "Info" : "Hide"}</button>
+    //   </h3>
+    //   <br></br>
+    // {info ? (
+    //   <>
+    //     <img
+    //       className="profile-pic"
+    //       src={job.user.image}
+    //       alt={job.user.name}
+    //     />
+    //     <br></br>
+    //     <p>{job.user.bio}</p>
+    //     <br></br>
+    //     <p>Number of Job Posts: {job.user.posted.length}</p>
+    //   </>
+    // ) : null}
+    //   <br></br>
+    //   {currentUser && currentUser.purpose === "worker" ? (
+    //     <button onClick={handleAccept}>Accept Job</button>
+    //   ) : null}
+    // </div>
   );
 }
 

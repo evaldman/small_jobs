@@ -1,3 +1,7 @@
+.profile-username {
+  margin-left: 30px;
+}
+
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -40,16 +44,6 @@
   transition: 250ms;
 }
 
-.edit-modal {
-  position: absolute;
-  top: 200px;
-  left: 200px;
-  right: 200px;
-  bottom: 200px;
-  background-color: rgb(177, 238, 247);
-  z-index: 1;
-}
-
 .fc .fc-view-harness {
   flex-grow: 1;
   position: relative;
@@ -63,4 +57,110 @@
 
 .profile-calendar {
   border: 1px solid #333;
+  background-color: rgb(230, 189, 247);
+  max-width: 100%;
+  height: auto;
+}
+
+.edit-modal {
+  /* position: absolute;
+  height: 400px;
+  margin-left: 400px; */
+  background-color: rgb(177, 238, 247);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.edit-container {
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  /* position: absolute; */
+  height: auto;
+}
+
+.form-input,
+.form-textarea,
+.form-submit {
+  font: 400 16px "Roboto", Helvetica, Arial, sans-serif;
+}
+
+#edit-form {
+  background: #89e8f5;
+  padding: 25px;
+  margin: 20px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+#edit-form h3 {
+  display: block;
+  font-size: 30px;
+  font-weight: 300;
+  margin-bottom: 10px;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  background: #fff;
+  margin: 0 0 5px;
+  padding: 10px;
+}
+
+.form-input:hover,
+.form-textarea:hover {
+  -webkit-transition: border-color 0.3s ease-in-out;
+  -moz-transition: border-color 0.3s ease-in-out;
+  transition: border-color 0.3s ease-in-out;
+  border: 1px solid #aaa;
+}
+
+.form-textarea {
+  height: 100px;
+  max-width: 100%;
+  resize: none;
+}
+
+.form-submit {
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  background: #4caf50;
+  color: #fff;
+  margin: 0 0 5px;
+  padding: 10px;
+  font-size: 15px;
+}
+
+.form-submit:hover {
+  background: #43a047;
+  -webkit-transition: background 0.3s ease-in-out;
+  -moz-transition: background 0.3s ease-in-out;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.form-submit:active {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: 0;
+  border: 1px solid #aaa;
+}
+
+.cal-modal-container {
+  max-width: 400px;
+  width: 100%;
+  /* margin: 0 auto; */
+  /* position: absolute; */
+  height: auto;
+  background: #89e8f5;
+  padding: 25px;
+  margin: 20px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
