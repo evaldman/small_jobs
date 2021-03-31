@@ -28,21 +28,32 @@ function App() {
         .then((response) => response.json())
         .then((user) => {
           setCurrentUser(user);
-          const someData = user.accepted.map((job) => {
-            return {
-              id: job.id,
-              title: job.title,
-              date: moment.utc(job.date).format("YYYY-MM-DD"),
-            };
-          });
-          setCalendarData(someData);
+          if (user.purpose === "worker") {
+            const acceptedData = user.accepted.map((job) => {
+              return {
+                id: job.id,
+                title: job.title,
+                date: moment.utc(job.date).format("YYYY-MM-DD"),
+              };
+            });
+            setCalendarData(acceptedData);
+          } else {
+            const postedData = user.posted.map((job) => {
+              return {
+                id: job.id,
+                title: job.title,
+                date: moment.utc(job.date).format("YYYY-MM-DD"),
+              };
+            });
+            setCalendarData(postedData);
+          }
         });
     }
   }, []);
   // console.log(calendarData);
   // console.log(currentUser.accepted.map((job) => job.title));
   // console.log(currentUser);
-  console.log(jobs);
+  // console.log(jobs);
 
   useEffect(() => {
     fetch("http://localhost:3000/jobs")
@@ -112,6 +123,7 @@ function App() {
               jobs={jobs}
               setJobs={setJobs}
               categories={categories}
+              setCalendarData={setCalendarData}
             />
           )}
         </Route>

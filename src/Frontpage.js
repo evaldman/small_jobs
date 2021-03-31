@@ -5,9 +5,13 @@ import "./frontpage.css";
 function Frontpage() {
   return (
     <div className="frontpage">
-      <img src={logo} alt="logo" />
+      <div>
+        <img src={logo} alt="logo" />
+      </div>
       <br></br>
-      Welcome to Small Jobs <br /> A place to find all types of work!
+      <div>
+        Welcome to Small Jobs <br /> A place to find all types of work!
+      </div>
     </div>
   );
 }

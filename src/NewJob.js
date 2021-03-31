@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import moment from "moment";
 
-function NewJob({ currentUser, setCurrentUser, jobs, setJobs, categories }) {
+function NewJob({
+  currentUser,
+  setCurrentUser,
+  jobs,
+  setJobs,
+  categories,
+  setCalendarData,
+}) {
   const [newJob, setNewJob] = useState({
     title: "",
     description: "",
@@ -12,6 +20,7 @@ function NewJob({ currentUser, setCurrentUser, jobs, setJobs, categories }) {
     completed: false,
     user_id: currentUser.id,
     category_id: "",
+    time: "12:00",
   });
 
   const history = useHistory();
@@ -35,8 +44,16 @@ function NewJob({ currentUser, setCurrentUser, jobs, setJobs, categories }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         setCurrentUser(data.user);
+        const postedData = data.user.posted.map((job) => {
+          return {
+            id: job.id,
+            title: job.title,
+            date: moment.utc(job.date).format("YYYY-MM-DD"),
+          };
+        });
+        setCalendarData(postedData);
         history.push("/profile");
         setJobs([...jobs, data]);
       });
@@ -104,6 +121,14 @@ function NewJob({ currentUser, setCurrentUser, jobs, setJobs, categories }) {
           type="date"
           value={newJob.date}
           name="date"
+          onChange={handleChange}
+        ></input>
+        <br></br>
+        <label>Time:</label>
+        <input
+          type="time"
+          value={newJob.time}
+          name="time"
           onChange={handleChange}
         ></input>
         <br></br>

@@ -30,14 +30,26 @@ function Login({ setCurrentUser, setCalendarData }) {
           // console.log(data.user);
           setCurrentUser(data.user);
           localStorage.setItem("token", data.token);
-          const someData = data.user.accepted.map((job) => {
-            return {
-              id: job.id,
-              title: job.title,
-              date: moment.utc(job.date).format("YYYY-MM-DD"),
-            };
-          });
-          setCalendarData(someData);
+          if (data.user.purpose === "worker") {
+            const acceptedData = data.user.accepted.map((job) => {
+              return {
+                id: job.id,
+                title: job.title,
+                date: moment.utc(job.date).format("YYYY-MM-DD"),
+              };
+            });
+            setCalendarData(acceptedData);
+          } else {
+            const postedData = data.user.posted.map((job) => {
+              return {
+                id: job.id,
+                title: job.title,
+                date: moment.utc(job.date).format("YYYY-MM-DD"),
+              };
+            });
+            setCalendarData(postedData);
+          }
+
           history.push("/profile");
         }
       });

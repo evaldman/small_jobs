@@ -21,54 +21,70 @@ function JobDetailCard({
   function infoClick() {
     setInfo((info) => !info);
   }
+  // console.log(job.date);
+  const doubleBooked = currentUser.accepted.filter(
+    (accept) => accept.date === job.date
+  );
+  const doubleBookedJobs = doubleBooked.map((acc) => acc.date);
+  // function testing() {
+  //   if (doubleBookedJobs == job.date) {
+  //     console.log(true);
+  //   } else {
+  //     console.log(false);
+  //   }
+  // }
 
   function handleAccept() {
-    fetch("http://localhost:3000/accepted_jobs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        completed: false,
-        job_id: job.id,
-        user_id: currentUser.id,
-        accept_status: true,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        // console.log(data);
-        setJobs(
-          jobs.map((job) => {
-            if (job.id === data.job.id) {
-              return data.job;
-            } else {
-              return job;
-            }
-          })
-        );
-        setCurrentUser(data.currentUser);
-        const newData = data.currentUser.accepted.map((job) => {
-          return {
-            id: job.id,
-            title: job.title,
-            date: moment.utc(job.date).format("YYYY-MM-DD"),
-          };
+    if (doubleBookedJobs == job.date) {
+      alert("You already have a job booked on this date");
+    } else {
+      fetch("http://localhost:3000/accepted_jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          completed: false,
+          job_id: job.id,
+          user_id: currentUser.id,
+          accept_status: true,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          // console.log(data);
+          setJobs(
+            jobs.map((job) => {
+              if (job.id === data.job.id) {
+                return data.job;
+              } else {
+                return job;
+              }
+            })
+          );
+          setCurrentUser(data.currentUser);
+          const newData = data.currentUser.accepted.map((job) => {
+            return {
+              id: job.id,
+              title: job.title,
+              date: moment.utc(job.date).format("YYYY-MM-DD"),
+            };
+          });
+          setCalendarData(newData);
+          history.push("/profile");
         });
-        setCalendarData(newData);
-        history.push("/profile");
-      });
+    }
   }
 
   return (
     <div className="detail-container">
-      <div class="container">
+      <div className="container">
         <header className="job-title">
           {" "}
           <h1>{job.title}</h1>
         </header>
-        <div class="content">
-          <div class="sidebar">
+        <div className="content">
+          <div className="sidebar">
             <div className="aside">
               <h3>Hours: {job.length}</h3>
               <h3>Pay: ${job.pay}/hr</h3>
@@ -92,10 +108,10 @@ function JobDetailCard({
               ) : null}
             </div>
           </div>
-          <div class="main">
+          <div className="main">
             <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
             <h3>{job.description}</h3>
-            <br></br>
+            {/* <br></br> */}
             {info ? (
               <>
                 <img

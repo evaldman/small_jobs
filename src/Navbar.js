@@ -13,6 +13,7 @@ function Navbar({ currentUser, setCurrentUser }) {
   }
 
   function handleLogout() {
+    handleClick();
     setCurrentUser(null);
     localStorage.removeItem("token");
   }
@@ -27,18 +28,18 @@ function Navbar({ currentUser, setCurrentUser }) {
         {currentUser ? (
           <>
             <li>
-              <Link className="nav-links" to="/profile">
+              <Link onClick={handleClick} className="nav-links" to="/profile">
                 <span>Home</span>
               </Link>
             </li>
             <li>
-              <Link className="nav-links" to="/jobs">
+              <Link onClick={handleClick} className="nav-links" to="/jobs">
                 <span>Browse Jobs</span>
               </Link>
             </li>
             {currentUser.purpose === "employer" && (
               <li>
-                <Link className="nav-links" to="/newjob">
+                <Link onClick={handleClick} className="nav-links" to="/newjob">
                   <span>Post a Job</span>
                 </Link>
               </li>
@@ -52,12 +53,12 @@ function Navbar({ currentUser, setCurrentUser }) {
         ) : (
           <>
             <li>
-              <Link className="nav-links" to="/login">
+              <Link onClick={handleClick} className="nav-links" to="/login">
                 <span>Sign In</span>
               </Link>
             </li>
             <li>
-              <Link className="nav-links" to="/signup">
+              <Link onClick={handleClick} className="nav-links" to="/signup">
                 <span>Sign Up</span>
               </Link>
             </li>
@@ -65,7 +66,7 @@ function Navbar({ currentUser, setCurrentUser }) {
         )}
       </ul>
       {currentUser ? (
-        <Link to="/">
+        <Link className="signout-button" to="/">
           <Button onClick={handleLogout}>Sign Out</Button>
         </Link>
       ) : null}

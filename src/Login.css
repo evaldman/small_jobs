@@ -1,47 +1,52 @@
 .login-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 10px 10px 10px;
-    color: white;
-    font-family: "Microsoft YaHei", serif;
-    font-size: 20px;
-    background-color:rgb(110, 94, 254);
-    border-radius: 15px;
-    width: 200px;
-    margin: auto;
-  }
-  
-  .login-input {
-    margin: 8px 0 2px 0;
-    width: 140px;
-  }
-  
-  .login-button {
-    /* width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px 10px 10px;
+  color: white;
+  font-family: "Microsoft YaHei", serif;
+  font-size: 20px;
+  background-color: rgb(110, 94, 254);
+  border-radius: 15px;
+  width: 200px;
+  margin: auto;
+}
+
+.login-input {
+  margin: 8px 0 2px 0;
+  width: 140px;
+}
+
+.login-button {
+  /* width: 100px;
     margin: 8px 0 9px 0;
     padding: 8px 20px;
     position: relative;
     border-radius: 0;
     background-color: rgb(177, 72, 72); */
-    padding: 8px 20px;
-    border-radius: 4px;
-    outline: none;
-    border: none;
-    cursor: pointer;
-    background-color:  rgb(67, 168, 235);
-    color: white;
-
-  }
-
-  .login-button:hover{
-    padding: 8px 20px;
-    transition: all 0.3s ease-out;
-    background: white;
-    color: rgb(114, 76, 218);
-    transition: 250ms;
+  padding: 8px 20px;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  background-color: rgb(67, 168, 235);
+  color: white;
 }
-  
+
+.login-button:hover {
+  padding: 8px 20px;
+  transition: all 0.3s ease-out;
+  background: white;
+  color: rgb(114, 76, 218);
+  transition: 250ms;
+}
+
+.login-container {
+  padding-top: 200px;
+}
+
+@media screen and (max-width: 960px) {
   .login-container {
-    padding-top: 200px;
+    padding-top: 50px;
   }
+}

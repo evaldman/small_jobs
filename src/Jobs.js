@@ -42,11 +42,13 @@ function Jobs({ currentUser, jobs, categories }) {
         onChange={(e) => setSelected(e.target.value)}
       >
         <option value hidden>
-          Select Job Category
+          Sort By Category
         </option>
         {categorySelect}
       </select>
-      <button onClick={() => setSelected("")}>Show All</button>
+      <button className="show-button" onClick={() => setSelected("")}>
+        Show All
+      </button>
 
       {jobsToDisplay}
     </div>

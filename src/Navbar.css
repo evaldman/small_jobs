@@ -1,125 +1,128 @@
-.navbar-items{
-    background: linear-gradient(90deg, rgb(110, 94, 254) 0%, rgb(73,63,252,1) 100%);
-    height: 80px;
+.navbar-items {
+  background: linear-gradient(
+    90deg,
+    rgb(110, 94, 254) 0%,
+    rgb(73, 63, 252, 1) 100%
+  );
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+.navbar-logo {
+  color: white;
+  justify-self: start;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.nav-menu {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-gap: 10px;
+  list-style: none;
+  text-align: center;
+  width: 70vw;
+  justify-content: end;
+  margin-right: 2rem;
+}
+
+.nav-links {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+}
+
+.nav-links:hover {
+  background-color: blue;
+  border-radius: 4px;
+  transition: all 0.2s ease-out;
+}
+
+.nav-links-mobile {
+  display: none;
+}
+
+.menu-icon {
+  display: none;
+}
+
+@media screen and (max-width: 960px) {
+  .navbar-items {
+    position: relative;
+  }
+
+  .nav-menu {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-}
+    flex-direction: column;
+    width: 100%;
+    height: 500px;
+    position: absolute;
+    top: 80px;
+    left: -100%;
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
 
-.navbar-logo{
-    color: white;
-    justify-self: start;
-    margin-left: 20px;
-    cursor: pointer;
+  .nav-menu.active {
+    background: rgb(114, 76, 218);
+    left: 0;
+    opacity: 1;
+    transition: all 0.5s ease;
+    z-index: 1;
+  }
 
-}
-
-.nav-menu{
-    display: grid;
-    grid-template-columns: repeat(5, auto);
-    grid-gap: 10px;
-    list-style: none;
+  .nav-links {
     text-align: center;
-    width: 70vw;
-    justify-content: end;
-    margin-right: 2rem;
-}
+    padding: 2rem;
+    width: 100%;
+    display: table;
+  }
 
-.nav-links{
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-}
+  .nav-links:hover {
+    background-color: rgb(148, 122, 221);
+    border-radius: 0;
+  }
 
-.nav-links:hover{
-    background-color: blue;
+  .navbar-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(25%, 50%);
+  }
+
+  .menu-icon {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-100%, 60%);
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+
+  .nav-links-mobile {
+    display: block;
+    text-align: center;
+    padding: 1.5rem;
+    margin: 2rem auto;
     border-radius: 4px;
-    transition: all 0.2s ease-out;
-}
+    width: 80%;
+    background: rgb(67, 168, 235);
+    text-decoration: none;
+    color: white;
+    font-size: 1.5rem;
+  }
 
-.nav-links-mobile{
+  .nav-links-mobile:hover {
+    background: white;
+    color: rgb(114, 76, 218);
+    transition: 250ms;
+  }
+
+  .signout-button {
     display: none;
-}
-
-.menu-icon{
-    display: none;
-}
-
-@media screen and (max-width: 960px){
-    .navbar-items{
-        position: relative;
-    }
-
-    .nav-menu{
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 500px;
-        position: absolute;
-        top: 80px;
-        left: -100%;
-        opacity: 1;
-        transition: all 0.5s ease;
-    }
-
-    .nav-menu.active{
-        background: rgb(114, 76, 218);
-        left: 0;
-        opacity: 1;
-        transition: all 0.5s ease;
-        z-index: 1;
-    }
-
-    .nav-links{
-        text-align: center;
-        padding: 2rem;
-        width: 100%;
-        display: table;
-    }
-
-    .nav-links:hover{
-        background-color: rgb(148, 122, 221);
-        border-radius: 0;
-    }
-
-    .navbar-logo{
-        position: absolute;
-        top: 0;
-        left: 0;
-        transform: translate(25%, 50%);
-    }
-
-    .menu-icon{
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        transform: translate(-100%, 60%);
-        font-size: 1.8rem;
-        cursor: pointer;
-    }
-
-    .nav-links-mobile{
-        display: block;
-        text-align: center;
-        padding: 1.5rem;
-        margin: 2rem auto;
-        border-radius: 4px;
-        width: 80%;
-        background: rgb(67, 168, 235);
-        text-decoration: none;
-        color: white;
-        font-size: 1.5rem;
-    }
-
-    .nav-links-mobile:hover{
-        background: white;
-        color: rgb(114, 76, 218);
-        transition: 250ms;
-    }
-
-    Button {
-        display: none;
-    }
+  }
 }

@@ -239,6 +239,14 @@ function Userpage({
         .then((res) => res.json())
         .then((data) => {
           setCurrentUser(data);
+          const postedData = data.posted.map((job) => {
+            return {
+              id: job.id,
+              title: job.title,
+              date: moment.utc(job.date).format("YYYY-MM-DD"),
+            };
+          });
+          setCalendarData(postedData);
         });
     }
   }
@@ -305,22 +313,45 @@ function Userpage({
   }
   // console.log(calendarClickId);
   // console.log(typeof calendarClickId);
-  const clickedJob = currentUser.accepted.map((job) => {
+
+  const clickAcceptedJob = currentUser.accepted.map((job) => {
     return (
       <>
         {job.id === parseInt(calendarClickId) ? (
-          <div className="cal-modal-container">
-            <h1>{job.title}</h1>
-            <h3>{job.description}</h3>
-            <h3>Hours: {job.length}</h3>
-            <h3>Pay: ${job.pay}/hr</h3>
-            <h3>Start Time:</h3>
-            <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
+          <div className="event-info-container">
+            <div className="event-info">
+              <h1>{job.title}</h1>
+              <h3>{job.description}</h3>
+              <h3>Hours: {job.length}</h3>
+              <h3>Pay: ${job.pay}/hr</h3>
+              <h3>Start Time:</h3>
+              <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
+            </div>
           </div>
         ) : null}
       </>
     );
   });
+
+  const clickPostedJob = currentUser.posted.map((job) => {
+    return (
+      <>
+        {job.id === parseInt(calendarClickId) ? (
+          <div className="event-info-container">
+            <div className="event-info">
+              <h1>{job.title}</h1>
+              <h3>{job.description}</h3>
+              <h3>Hours: {job.length}</h3>
+              <h3>Pay: ${job.pay}/hr</h3>
+              <h3>Start Time:</h3>
+              <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
+            </div>
+          </div>
+        ) : null}
+      </>
+    );
+  });
+
   // console.log(currentUser.accepted);
   function totalWorkerCompleted() {
     return currentUser.accepted
@@ -558,7 +589,13 @@ function Userpage({
         ariaHideApp={false}
         onRequestClose={() => setJobDetailModal(false)}
       >
-        {clickedJob}
+        <>
+          {currentUser.purpose === "worker" ? (
+            <div>{clickAcceptedJob}</div>
+          ) : (
+            <div>{clickPostedJob}</div>
+          )}
+        </>
       </Modal>
     </div>
   );

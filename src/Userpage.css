@@ -153,14 +153,42 @@
   border: 1px solid #aaa;
 }
 
-.cal-modal-container {
+.event-info-container {
   max-width: 400px;
   width: 100%;
-  /* margin: 0 auto; */
+  margin: 0 auto;
   /* position: absolute; */
   height: auto;
+}
+
+.event-info {
   background: #89e8f5;
   padding: 25px;
   margin: 20px;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+@media screen and (max-width: 960px) {
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 1em;
+    grid-row-gap: 1em;
+    margin-left: 20px;
+    margin-right: 20px;
+    grid-auto-rows: minmax(400px, auto);
+  }
+
+  .edit-modal {
+    /* position: absolute;
+    height: 400px;
+    margin-left: 400px; */
+    width: 70%;
+    background-color: rgb(177, 238, 247);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
 }
