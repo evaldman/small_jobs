@@ -10,7 +10,7 @@ function Frontpage() {
       </div>
       <br></br>
       <div>
-        Welcome to Small Jobs <br /> A place to find all types of work!
+        Welcome to Small Jobs <br /> A place to find all types of jobs!
       </div>
     </div>
   );

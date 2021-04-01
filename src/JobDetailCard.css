@@ -55,6 +55,10 @@
 .content {
   display: flex;
 }
+
+.profile-pic {
+  width: 150px;
+}
 @media screen and (max-width: 960px) {
   .container {
     width: 100%;

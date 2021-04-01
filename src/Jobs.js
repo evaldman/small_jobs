@@ -11,14 +11,16 @@ function Jobs({ currentUser, jobs, categories }) {
   // function handleSelected(e) {
   //   setSelected(e.target.value);
   // }
-  // console.log(jobs);
-
+  // const test = jobs.map((job) => job.date);
+  // console.log(typeof test);
   const openJobs = jobs.filter((job) => job.accept_status === false);
   // const filteredJobs = openJobs.filter((job) => job.job_category === selected);
   const jobsToDisplay = openJobs
+    .sort((a, b) => a.date.localeCompare(b.date))
     .filter((job) =>
       !selected ? true : job.job_category === parseInt(selected)
     )
+
     .map((job, index) => {
       return <Job key={index} job={job} />;
     });

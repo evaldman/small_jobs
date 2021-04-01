@@ -57,7 +57,7 @@ function Signup({ setCurrentUser }) {
 
         <br />
 
-        <lable>Password</lable>
+        <label>Password</label>
         <input
           autoComplete="current-password"
           className="login-input"

@@ -71,7 +71,7 @@ function Login({ setCurrentUser, setCalendarData }) {
 
         <br />
 
-        <lable>Password</lable>
+        <label>Password</label>
         <input
           autoComplete="current-password"
           className="login-input"

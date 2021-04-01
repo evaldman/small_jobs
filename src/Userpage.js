@@ -30,22 +30,24 @@ function Userpage({
   const [editJobId, setEditJobId] = useState("");
   const [calendarClickId, setCalendarClickId] = useState("");
 
-  const acceptedToDisplay = currentUser.accepted.map((job) => {
-    return (
-      <>
-        {job.completed === false ? (
-          <li key={job.id}>
-            Title: {job.title} <br></br> Date:{" "}
-            {moment.utc(job.date).format("MM-DD-YYYY")} <br></br> Expected Pay:
-            ${job.length * job.pay}
-            <br></br>
-            {/* <button onClick={() => handleCompleted(job)}>Completed</button> */}
-            <button onClick={() => handleCancel(job)}>Cancel</button>
-          </li>
-        ) : null}
-      </>
-    );
-  });
+  const acceptedToDisplay = currentUser.accepted
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((job) => {
+      return (
+        <>
+          {job.completed === false ? (
+            <li key={job.id}>
+              Title: {job.title} <br></br> Date:{" "}
+              {moment.utc(job.date).format("MM-DD-YYYY")} <br></br> Expected
+              Pay: ${job.length * job.pay}
+              <br></br>
+              {/* <button onClick={() => handleCompleted(job)}>Completed</button> */}
+              <button onClick={() => handleCancel(job)}>Cancel</button>
+            </li>
+          ) : null}
+        </>
+      );
+    });
 
   const completedToDislay = currentUser.accepted.map((job) => {
     return (
@@ -62,33 +64,36 @@ function Userpage({
     );
   });
 
-  const openToDisplay = currentUser.posted.map((job) => {
-    return (
-      <>
-        {job.completed === false && job.accept_status === false ? (
-          <li key={job.id}>
-            Title: {job.title}
-            <br></br> Date: {moment.utc(job.date).format("MM-DD-YYYY")}{" "}
-            <br></br> Expected cost: ${job.length * job.pay}
-            <br></br>Status: {job.accept_status === true ? "Accepted" : "Open"}
-            <br></br> Completed? {job.completed === true ? "Yes" : "No"}
-            <br></br>
-            {job.completed === false && (
-              <>
-                {job.accept_status === true && (
-                  <button onClick={() => handleCompleted(job)}>
-                    Completed
-                  </button>
-                )}
-                <button onClick={() => openEditJob(job)}>Edit</button>
-                <button onClick={() => handleDeleteJob(job)}>Delete</button>
-              </>
-            )}
-          </li>
-        ) : null}
-      </>
-    );
-  });
+  const openToDisplay = currentUser.posted
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((job) => {
+      return (
+        <>
+          {job.completed === false && job.accept_status === false ? (
+            <li key={job.id}>
+              Title: {job.title}
+              <br></br> Date: {moment.utc(job.date).format("MM-DD-YYYY")}{" "}
+              <br></br> Expected cost: ${job.length * job.pay}
+              <br></br>Status:{" "}
+              {job.accept_status === true ? "Accepted" : "Open"}
+              <br></br> Completed? {job.completed === true ? "Yes" : "No"}
+              <br></br>
+              {job.completed === false && (
+                <>
+                  {job.accept_status === true && (
+                    <button onClick={() => handleCompleted(job)}>
+                      Completed
+                    </button>
+                  )}
+                  <button onClick={() => openEditJob(job)}>Edit</button>
+                  <button onClick={() => handleDeleteJob(job)}>Delete</button>
+                </>
+              )}
+            </li>
+          ) : null}
+        </>
+      );
+    });
   // console.log(jobs);
   const acceptToDisplay = currentUser.posted.map((job) => {
     return (
@@ -203,8 +208,11 @@ function Userpage({
       length: job.length,
       pay: job.pay,
       date: moment.utc(job.date).format("YYYY-MM-DD"),
+      time: moment.utc(job.time).format("hh:mm A"),
+      address: job.address,
     });
     setEditJobId(job.id);
+    // console.log(moment.utc(job.time).format("HH:mm A"));
   }
 
   // console.log(editJobId);
@@ -324,8 +332,9 @@ function Userpage({
               <h3>{job.description}</h3>
               <h3>Hours: {job.length}</h3>
               <h3>Pay: ${job.pay}/hr</h3>
-              <h3>Start Time:</h3>
+              <h3>Start Time:{moment.utc(job.time).format("hh:mm A")}</h3>
               <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
+              <h3>Where: {job.address}</h3>
             </div>
           </div>
         ) : null}
@@ -340,11 +349,12 @@ function Userpage({
           <div className="event-info-container">
             <div className="event-info">
               <h1>{job.title}</h1>
-              <h3>{job.description}</h3>
-              <h3>Hours: {job.length}</h3>
-              <h3>Pay: ${job.pay}/hr</h3>
-              <h3>Start Time:</h3>
-              <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
+              <h4>{job.description}</h4>
+              <h4>Hours: {job.length}</h4>
+              <h4>Pay: ${job.pay}/hr</h4>
+              <h4>Start Time: {moment.utc(job.time).format("hh:mm A")}</h4>
+              <h4>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h4>
+              <h4>Where: {job.address}</h4>
             </div>
           </div>
         ) : null}
@@ -535,18 +545,15 @@ function Userpage({
             onChange={handleJobChange}
           ></textarea>
           <br></br>
-          {/* <label>Category: </label>
-        <select
-          value={editJob.category_id}
-          name="category_id"
-          onChange={handleChange}
-        >
-          <option value hidden>
-            Select Category
-          </option>
-          {categoryOptions}
-        </select>
-        <br></br> */}
+          <label>Location:</label>
+          <input
+            className="form-input"
+            type="text"
+            value={editJob.address}
+            name="address"
+            onChange={handleJobChange}
+          ></input>
+          <br></br>
           <label>Length:</label>
           <input
             className="form-input"
@@ -572,6 +579,15 @@ function Userpage({
             value={editJob.date}
             name="date"
             // defaultValue={editJob.date}
+            onChange={handleJobChange}
+          ></input>
+          <br></br>
+          <label>Time:</label>
+          <input
+            className="form-input"
+            type="time"
+            value={editJob.time}
+            name="time"
             onChange={handleJobChange}
           ></input>
           <br></br>

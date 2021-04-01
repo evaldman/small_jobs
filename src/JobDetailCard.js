@@ -37,6 +37,8 @@ function JobDetailCard({
   function handleAccept() {
     if (doubleBookedJobs == job.date) {
       alert("You already have a job booked on this date");
+    } else if (currentUser.name === job.user.name) {
+      alert("You posted this job");
     } else {
       fetch("http://localhost:3000/accepted_jobs", {
         method: "POST",
@@ -109,9 +111,10 @@ function JobDetailCard({
             </div>
           </div>
           <div className="main">
-            <h3>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h3>
-            <h3>{job.description}</h3>
-            {/* <br></br> */}
+            <h4>When: {moment.utc(job.date).format("dddd, MMMM Do YYYY")}</h4>
+            <h4>Location: {job.address}</h4>
+            <p>{job.description}</p>
+            <br></br>
             {info ? (
               <>
                 <img
